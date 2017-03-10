@@ -269,7 +269,6 @@ public class TController {
 			// 将JSONObject传回页面
 			System.out.println("beanJson:"+beanJson);
 			response.getWriter().print(beanJson);
-			
 		} catch (IOException e) {
 			System.out.println("catch:response.getWriter");
 			e.printStackTrace();
