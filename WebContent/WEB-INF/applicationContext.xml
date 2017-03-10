@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+                      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- 配置数据源，设定dataSource -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/pms_db?useUnicode=true&amp;characterEncoding=UTF-8"/> -->
+		<property name="url" value="jdbc:mysql://localhost:3306/pms_db" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+
+	<!-- 配置transactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 配置jdbcTemplate -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- userService -->
+	<bean id="userService" class="javasrc.UserServiceImpl">
+		<!-- 依赖注入jdbcTemplate -->
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<!-- 依赖注入transactionManager -->
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<!-- taskService -->
+	<bean id="taskService" class="javasrc.TaskServiceImpl">
+		<!-- 依赖注入jdbcTemplate -->
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<!-- 依赖注入transactionManager -->
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<!-- projectService -->
+	<bean id="projectService" class="javasrc.ProjectServiceImpl">
+		<!-- 依赖注入jdbcTemplate -->
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<!-- 依赖注入transactionManager -->
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+  <!-- 
+	<bean id="springDAOProxy"                               
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"> 
+        <property name="proxyInterfaces"> 
+            <list>
+                <value>com.test.DAO</value>
+            </list>
+        </property>
+        <property name="target"> 
+            <ref bean="DAO"/> 
+        </property> 
+        <property name="transactionManager"> 
+            <ref bean="transactionManager"/> 
+        </property> 
+        <property name="transactionAttributes"> 
+            <props> 
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop> 
+            </props> 
+        </property>        
+    </bean> 
+
+	<bean id="DAO" class="com.test.DAOImpl">
+		<property name="jt">
+          <ref bean="jdbcTemplate" />
+       </property>
+	</bean>
+	
+    <bean name="userManager" class="com.test.UserManagerImpl" init-method="init">
+            <property name="dao">
+                    <ref bean="DAO" />
+            </property>
+    </bean>
+    -->
+  <!-- 为personDAOImpl注入数据源
+  <bean id="personDAOImpl"
+   class="javasrc.PersonDAOImpl">
+   <property name="jdbcTemplate" ref="jdbcTemplate"/>
+  </bean> -->
+
+
+  <!-- 定义Hibernate的sessionFactory
+  <bean id="sessionFactory"	class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+	<property name="hibernateProperties">
+	  <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hiberante.format_sql">true</prop>
+      </props>
+    </property>
+    <property name="mappingResources">
+      <list>
+        <value>com.bean.Person</value>
+      </list>
+    </property>
+  </bean>  -->
+</beans>

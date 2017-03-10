@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <display-name>Spring MVC Application</display-name>
+
+  <!-- 设置字符集 -->
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+   <!-- 配置DispatcherServlet -->
+   <!-- DispatcherServlet是前端控制器设计模式的实现，提供Spring Web MVC的集中访问点，
+         而且负责职责的分派，而且与Spring IoC容器无缝集成，从而可以获得Spring的所有好处。 
+   DispatcherServlet主要用作职责调度工作，本身主要用于控制流程 -->
+   <servlet>
+   <!-- 文件“HW-servlet.xml”中的“HW”是由servlet-name规定的,要保持一致  -->
+      <servlet-name>HW</servlet-name>
+      <servlet-class>
+         org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup><!-- Servlet自启动顺序号 -->
+   </servlet>
+
+   <!-- 
+   1、拦截*.do、*.htm， 例如：/user/add.do
+　　这是最传统的方式，最简单也最实用。不会导致静态文件（jpg,js,css）被拦截。
+　　2、拦截/，例如：/user/add
+　　可以实现现在很流行的REST风格。很多互联网类型的应用很喜欢这种风格的URL。
+　　弊端：会导致静态文件（jpg,js,css）被拦截后不能正常显示。想实现REST风格，事情就是麻烦一些。后面有解决办法还算简单。
+　　3、拦截/*，这是一个错误的方式，请求可以走到Action中，但转到jsp时再次被拦截，不能访问到jsp。
+   -->
+  <!-- 如果你的DispatcherServlet拦截"/"，为了实现REST风格，拦截了所有的请求，
+      那么同时对*.js,*.jpg等静态文件的访问也就被拦截了。
+  -->
+  <!-- spring mvc 静态资源 404问题:http://blog.csdn.net/this_super/article/details/7884383 -->
+   <servlet-mapping>
+      <servlet-name>HW</servlet-name>
+      <url-pattern>/</url-pattern>
+   </servlet-mapping>
+
+	<!-- 修改web.xml文件，增加对静态资源的url映射 -->
+	<!-- 激活Tomcat的defaultServlet来处理静态文件 -->
+	<!-- Tomcat自带的默认Servlet的名字"default" -->
+   <servlet-mapping>
+      <servlet-name>default</servlet-name>
+      <url-pattern>*.js</url-pattern>
+   </servlet-mapping>
+
+  <!-- 指定Spring Bean的配置文件所在目录。默认配置在WEB-INF目录下-->
+  <context-param> 
+    <param-name>contextConfigLocation</param-name> 
+    <param-value>/WEB-INF/applicationContext.xml</param-value> 
+  </context-param>
+
+  <!-- Spring配置 -->
+  <listener>  
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+  </listener>
+
+  <welcome-file-list>
+    <!--
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    -->
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- 
+  <error-page>
+	<error-code>500</error-code>
+	<location>/WEB-INF/jsp/error.jsp</location> 
+  </error-page>
+  <error-page>
+	<exception-type>java.lang.ArithmeticException</exception-type>
+	<location>/WEB-INF/jsp/error.jsp</location> 
+  </error-page>
+  <error-page>
+	<exception-type>org.springframework.dao.DataAccessException</exception-type>
+	<location>/WEB-INF/jsp/error.jsp</location> 
+  </error-page>
+  -->
+
+</web-app>
