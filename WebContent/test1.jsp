@@ -83,7 +83,7 @@ value="Email Address" />
 <input class="someClass" type="text" title="Default Value Here"
 value="Insert form refill here" />
 <form id="myform" action="#">
-地址2：<input type="text" id="txt1" value="请输入邮箱地址"/><br /><br />
+地址3：<input type="text" id="txt1" value="请输入邮箱地址"/><br /><br />
 密码2：<input type="text" id="txt2" value="请输入邮箱密码"/>
 <input type="password" id="pswd" /><br /><br />
 <input type="button"  id="btn"value="登陆" />
